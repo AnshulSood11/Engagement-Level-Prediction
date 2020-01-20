@@ -14,7 +14,6 @@ class FeatureCollection():
 
 		for x in ld_no_ext:
 			self.ld_csv	.append(os.path.join(features_dir, x + '.csv'))
-			self.ld_no_ext.append(x)
 
 		self.ld_csv = np.array(self.ld_csv)
 		self.ld_no_ext = np.array(self.ld_no_ext)
@@ -99,13 +98,9 @@ class FeatureCollection():
 			ret = None
 		return ret
 
-	def get_item(self, idx, ft_type=0):
-
-		if ft_type == 0:
-			txt_name = self.ld_csv[idx]
-			X = self.parse_gaze_features(txt_name)
-		else:
-			raise "Do not support ft_type = {}".format(ft_type)
+	def get_item(self, idx):
+		txt_name = self.ld_csv[idx]
+		X = self.parse_gaze_features(txt_name)
 		return X
 
 	def get_all_data(self):

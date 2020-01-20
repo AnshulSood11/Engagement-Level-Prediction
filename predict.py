@@ -16,20 +16,11 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import CuDNNLSTM, Dense, TimeDistributed, GlobalAveragePooling1D, Activation, Concatenate, \
 	InputLayer, PReLU
 
-
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-
-seed = 0
-np.random.seed(seed)
-random.seed(0)
-
-
 config = tf.ConfigProto()
-config.gpu_options.per_process_gpu_memory_fraction = 0.2
+config.gpu_options.allow_growth = True
+
 session = tf.Session(config=config)
-
-
-tf.set_random_seed(seed)
+tf.keras.backend.set_session(session)
 
 interval_duration = 10.0
 
@@ -91,23 +82,23 @@ def get_model(model_index, n_segments=15, input_units=60):
     return cur_model
 
 def periodic_function():
+	duration = time.strftime("%M:%S", time.gmtime(int(time.time() - start_time)))
 	if os.path.isdir("../../OpenFace/build/processed"):
-		eye_gaze_v1 = get_model(model_index=0)
-		eye_gaze_v2 = get_model(model_index=1)
 		feature_extraction = FeatureCollection('../../OpenFace/build/processed')
 		ft = np.array(feature_extraction.get_all_data())
-		v1 = eye_gaze_v1.predict(ft[0].reshape(1,15,60))
-		v2 = eye_gaze_v2.predict(ft[0].reshape(1,15,60))
+		with session.as_default():
+			with session.graph.as_default():
+				v1 = eye_gaze_v1.predict(ft[0].reshape(1,15,60))
+				v2 = eye_gaze_v2.predict(ft[0].reshape(1,15,60))
 		print('{} {}'.format(v1,v2))
 		enga_score = 0.5 * (v1 + v2)
 		print(enga_score)
-		duration = time.strftime("%M:%S", time.gmtime(int(time.time() - start_time)))
 		x.append(duration)
-		if enga_score<0.4:
+		if enga_score < 0.4:
 			y.append(0)
-		elif enga_score<0.6:
+		elif enga_score < 0.6:
 			y.append(1)
-		elif enga_score<0.83:
+		elif enga_score < 0.83:
 			y.append(2)
 		else:
 			y.append(3)
@@ -118,17 +109,16 @@ def periodic_function():
 def startTimer():
 	threading.Timer(interval_duration,startTimer).start()
 	periodic_function()
-def main():
-	startTimer()
-	while True:
-		plt.yticks(np.arange(4),('Disengaged','Barely Engaged','Engaged','Highly Engaged'))
-		plt.xticks(rotation=90)
-		plt.step(x, y,'b')
-		# plt.xlabel('Duration')
-		# plt.ylabel('Engagement Level')
-		plt.pause(1)
+
 if __name__ == '__main__':
 	x = []
 	y = []
+	eye_gaze_v1 = get_model(model_index=0)
+	eye_gaze_v2 = get_model(model_index=1)
 	start_time = time.time()
-	main()
+	startTimer()
+	while True:
+		plt.yticks(np.arange(4), ('Disengaged', 'Barely Engaged', 'Engaged', 'Highly Engaged'))
+		plt.xticks(rotation=90)
+		plt.step(x, y, 'b')
+		plt.pause(1)
