@@ -46,8 +46,12 @@ The engagement-level is classified into four levels: Disengaged, Barely-engaged,
 1. Install [OpenFace](https://github.com/TadasBaltrusaitis/OpenFace)
 
 2. Make the following modifications in OpenFace:
-  a. Replace the FeatureExtraction.cpp in OpenFace/exe/FeatureExtraction with FeatureExtraction.cpp in OpenFace mods folder.
-  b. Do the same for SequenceCapture.cpp and SequenceCapture.h in OpenFace/lib/local/Utilities/src
+
+    a. Replace the FeatureExtraction.cpp in OpenFace/exe/FeatureExtraction with FeatureExtraction.cpp in OpenFace mods folder.
+  
+    b. Do the same for SequenceCapture.cpp and SequenceCapture.h in OpenFace/lib/local/Utilities/src
+  
+    c. Go to OpenFace/build and exectute ```make```.
   
 3. Delete the folder OpenFace/build/processed
 
