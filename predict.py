@@ -18,7 +18,6 @@ from tensorflow.keras.layers import CuDNNLSTM, Dense, TimeDistributed, GlobalAve
 
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
-
 session = tf.Session(config=config)
 tf.keras.backend.set_session(session)
 
@@ -86,13 +85,17 @@ def periodic_function():
 	if os.path.isdir("../../OpenFace/build/processed"):
 		feature_extraction = FeatureCollection('../../OpenFace/build/processed')
 		ft = np.array(feature_extraction.get_all_data())
-		with session.as_default():
-			with session.graph.as_default():
+		with session1.as_default():
+			with graph1.as_default():
 				v1 = eye_gaze_v1.predict(ft[0].reshape(1,15,60))
+		with session2.as_default():
+			with graph2.as_default():		
 				v2 = eye_gaze_v2.predict(ft[0].reshape(1,15,60))
+
+
 		print('{} {}'.format(v1,v2))
 		enga_score = 0.5 * (v1 + v2)
-		print(enga_score)
+		print('engagement_score = {}'.format(enga_score))
 		x.append(duration)
 		if enga_score < 0.4:
 			y.append(0)
@@ -113,8 +116,18 @@ def startTimer():
 if __name__ == '__main__':
 	x = []
 	y = []
-	eye_gaze_v1 = get_model(model_index=0)
-	eye_gaze_v2 = get_model(model_index=1)
+
+	graph1 = tf.Graph()
+	with graph1.as_default():
+		session1 = tf.Session()
+		with session1.as_default():
+			eye_gaze_v1 = get_model(model_index=0)
+	graph2 = tf.Graph()
+	with graph2.as_default():
+		session2 = tf.Session()
+		with session2.as_default():
+			eye_gaze_v2 = get_model(model_index=1)
+
 	start_time = time.time()
 	startTimer()
 	while True:
