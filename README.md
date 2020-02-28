@@ -27,9 +27,13 @@ Two different models were trained with slightly different hyperaprameters. Avera
 ### 4. Categorical Classification:
 
 The engagement-level is classified into four levels: Disengaged, Barely-engaged, Engaged and Highly-engaged. The value range for each level is as follows:
+
 0 <= engagement-intensity < 0.4 : Disengaged
+
 0.4 <= engagement-intensity < 0.6: Barely-Engaged
+
 0.6 <= engagement-intensity < 0.83: Engaged
+
 0.83 <= engagement-intensity <=1.00 : Highly-engaged
 
 ### 5. Data-Presentation:
