@@ -40,7 +40,7 @@ The engagement-level is classified into four levels: Disengaged, Barely-engaged,
 ## Requirements
 
 1. Linux
-2. GPU
+2. Nvidia GPU
 
 ## Geting Started
 
