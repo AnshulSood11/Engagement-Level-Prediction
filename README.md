@@ -50,7 +50,7 @@ The engagement-level is classified into four levels: Disengaged, Barely-engaged,
 
     a. Replace the FeatureExtraction.cpp in OpenFace/exe/FeatureExtraction with FeatureExtraction.cpp in OpenFace mods folder.
   
-    b. Do the same for SequenceCapture.cpp and SequenceCapture.h in OpenFace/lib/local/Utilities/src
+    b. Do the same for SequenceCapture.cpp in OpenFace/lib/local/Utilities/src and for SequenceCapture.h in OpenFace/lib/local/Utilities/include
   
     c. Go to OpenFace/build and exectute ```make```.
   
