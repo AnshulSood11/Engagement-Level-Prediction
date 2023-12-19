@@ -86,6 +86,6 @@ York, NY, USA, 5 pages. https://doi.org/10.1145/3340555.3355714
 * [th2l/SML_EW_EmotiW2019](https://github.com/th2l/SML_EW_EmotiW2019) Update: This repository has been taken down by its [owner](https://github.com/th2l).
 
 
-## Contributers
+## Contributors
 * [@AnshulSood11](https://github.com/AnshulSood11)
 * [@SulRash](https://github.com/SulRash)
