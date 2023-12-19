@@ -11,15 +11,14 @@ import time
 import md_config as cfg
 from feature_collection import FeatureCollection
 
-
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import CuDNNLSTM, Dense, TimeDistributed, GlobalAveragePooling1D, Activation, Concatenate, \
+from tensorflow.keras.layers import LSTM, Dense, TimeDistributed, GlobalAveragePooling1D, Activation, Concatenate, \
 	InputLayer, PReLU
 
-config = tf.ConfigProto()
-config.gpu_options.allow_growth = True
-session = tf.Session(config=config)
-tf.keras.backend.set_session(session)
+config = tf.compat.v1.ConfigProto()
+#config.gpu_options.allow_growth = True
+session = tf.compat.v1.Session(config=config)
+tf.compat.v1.keras.backend.set_session(session)
 
 interval_duration = 10.0
 
@@ -39,12 +38,12 @@ def define_model(hparams, model_name):
 								  input_shape=(current_time_step, hparams['FC1'][0])))
 
 	model.add(
-		CuDNNLSTM(current_lstm_units[0], return_sequences=True, input_shape=(current_time_step, current_input_units),
+		LSTM(current_lstm_units[0], return_sequences=True, input_shape=(current_time_step, current_input_units),
 				  stateful=False))
 
 	if current_n_lstms > 1:
 		for idx in range(1, current_n_lstms):
-			model.add(CuDNNLSTM(current_lstm_units[idx], return_sequences=True))
+			model.add(LSTM(current_lstm_units[idx], return_sequences=True))
 
 	for idx in range(current_n_denses):
 		model.add(TimeDistributed(Dense(current_dense_units[idx], activation='relu')))
@@ -119,12 +118,12 @@ if __name__ == '__main__':
 
 	graph1 = tf.Graph()
 	with graph1.as_default():
-		session1 = tf.Session()
+		session1 = tf.compat.v1.Session()
 		with session1.as_default():
 			eye_gaze_v1 = get_model(model_index=0)
 	graph2 = tf.Graph()
 	with graph2.as_default():
-		session2 = tf.Session()
+		session2 = tf.compat.v1.Session()
 		with session2.as_default():
 			eye_gaze_v2 = get_model(model_index=1)
 
